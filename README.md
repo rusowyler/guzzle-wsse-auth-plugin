@@ -12,11 +12,11 @@ In it's simplest form
 <?php 
 
 require_once 'guzzle.phar';
-require_once __DIR__ . '/src/Atst/Guzzle/Http/Plugin/WsseAuthPlugin.php';
+require_once __DIR__ . '/src/Ebowe/Guzzle/Http/Plugin/WsseAuthPlugin.php';
 
-$wsse = new Atst\Guzzle\Http\Plugin\WsseAuthPlugin("my_username", "my_password");
+$wsse = new \Ebowe\Guzzle\Http\Plugin\WsseAuthPlugin("my_username", "my_password");
 $client = new Guzzle\Service\Client("http://example.com");
-$client->getEventDispatcher()->addSubscriber($wsse);
+$client->getEmitter()->attach($wsse);
 $response = $client->get("/someapi")->send();
 ```
 
@@ -25,7 +25,7 @@ To specify your own digest function
 ``` php
 <?php 
 
-$wsse = new Atst\Guzzle\Http\Plugin\WsseAuthPlugin("my_username", "my_password", function($nonce, $created, $password) {
+$wsse = new Ebowe\Guzzle\Http\Plugin\WsseAuthPlugin("my_username", "my_password", function($nonce, $created, $password) {
     return md5($nonce . $created . $password);
 });
 
