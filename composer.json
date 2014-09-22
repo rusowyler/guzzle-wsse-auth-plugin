@@ -2,7 +2,7 @@
     "name": "rusowyler/guzzle-wsse-auth-plugin",
     "description": "A WSSE based authentication plugin for guzzle",
     "require": {
-        "guzzle/guzzle": ">=v4.0"
+        "guzzlehttp/guzzle": ">=v4.0"
     },
     "autoload": {
         "psr-0": {
