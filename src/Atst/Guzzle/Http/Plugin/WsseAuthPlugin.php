@@ -1,8 +1,8 @@
 <?php
-namespace Atst\Guzzle\Http\Plugin;
+namespace Ebowe\Guzzle\Http\Plugin;
 
-use Guzzle\Common\Event;
-use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use \GuzzleHttp\Event\BeforeEvent;
+use \GuzzleHttp\Event\RequestEvents;
 
 /**
  * Adds WSSE auth headers based on http://www.xml.com/pub/a/2003/12/17/dive.html
@@ -10,7 +10,7 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
  * @see    http://www.xml.com/pub/a/2003/12/17/dive.html
  * @author Dave Marshall <dave.marshall@atstsolutions.co.uk>
  */
-class WsseAuthPlugin implements EventSubscriberInterface
+class WsseAuthPlugin implements \GuzzleHttp\Event\SubscriberInterface
 {
     /**
      * @var string
@@ -67,19 +67,19 @@ class WsseAuthPlugin implements EventSubscriberInterface
     /**
      * {@inheritdoc}
      */
-    public static function getSubscribedEvents()
+     public function getEvents()
     {
-        return array('client.create_request' => 'onRequestCreate');
+        return ['before' => ['onRequestCreate', RequestEvents::SIGN_REQUEST]];
     }
-
+    
     /**
      * Add WSSE auth headers
      *
      * @param Event $event
      */
-    public function onRequestCreate(Event $event)
+    public function onRequestCreate(\GuzzleHttp\Event\BeforeEvent $event)
     {
-        $request = $event['request'];
+        $request = $event->getRequest();
 
         $nonce = call_user_func($this->noncer);
         $created = date('r');
